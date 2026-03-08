@@ -106,6 +106,7 @@ export default defineComponent({
     
   },
   methods:{
+    // TODO when adding date, reorders them
     convertStringToDate(dateString: string): Moment {
       return convertToMoment(dateString);
     },
@@ -125,7 +126,7 @@ export default defineComponent({
         this.itemsDateNeeded = this.itemsDateNeeded.filter(i => i.date !== item.date);
     },
     addDateNeeded() {
-        if (this.dateToAdd && this.nToAdd > 0) {
+        if (this.dateToAdd && this.nToAdd > 0 && this.dateToAdd.month() === this.firstDateMonth.month()) {
             if (checkDateAlreadyThere(this.dateToAdd, this.itemsDateNeeded)) {
                 return;
             }
@@ -156,6 +157,7 @@ export default defineComponent({
   <v-date-input 
     v-model="firstDateMonth"
     label="First date of the month"
+    input-format="yyyy-mm-dd"
   />
 
   <h2>Dates needed</h2>
@@ -169,6 +171,7 @@ export default defineComponent({
       <v-date-input
         :model-value="item.date"
         @update:model-value="updatedDateItem($event, item)"
+        input-format="yyyy-mm-dd"
       />
 
     </template>
@@ -190,6 +193,7 @@ export default defineComponent({
   <v-row>
     <v-date-input 
       v-model="dateToAdd"
+      input-format="yyyy-mm-dd"
     />
 
     <v-number-input 
