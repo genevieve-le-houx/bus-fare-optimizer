@@ -9,6 +9,11 @@ export default defineComponent({
     return {
       count: 0
     }
+  },
+  computed: {
+    textCount(): string {
+      return `Count is: ${this.count}`;
+    }
   }
 })
 </script>
@@ -17,7 +22,11 @@ export default defineComponent({
   <h1>{{ msg }}</h1>
 
   <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
+    <v-btn 
+      type="button" 
+      @click="count++"
+      :text="textCount"
+    />
   </div>
 
 </template>
