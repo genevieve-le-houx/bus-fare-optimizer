@@ -44,6 +44,9 @@ export default defineComponent({
       ] as Array<DateNeededItem>,
       itemsPerPage: -1,
 
+      dateToAdd: null as Moment | null,
+      nToAdd: 1,
+
       count: 0,
       fares: {
         [EnumFareType.single]: 3.25,
@@ -109,18 +112,21 @@ export default defineComponent({
         // TODO not let user choose a date already there
         item.date = newValue;
     },
-    updatedNItem(newValue: string, item: DateNeededItem) {
-        const n = parseInt(newValue);
-        if (isNaN(n)) {
-          return;
-        }
-
-        item.n = n;
+    updatedNItem(newValue: number, item: DateNeededItem) {
+        item.n = newValue;
     },
     deleteDateNeeded(item: DateNeededItem) {
         this.itemsDateNeeded = this.itemsDateNeeded.filter(i => i.date !== item.date);
     },
+    addDateNeeded() {
+        if (this.dateToAdd && this.nToAdd > 0) {
+          // TODO make sure date not already there
+            this.itemsDateNeeded.push({ date: this.dateToAdd, n: this.nToAdd });
+        }
+    },
     computeBest() {
+      // TODO make sure all correct month
+
       const dateNeeded: Record<string, number> = this.itemsDateNeeded.reduce((acc, item) => {
         acc[convertToString(item.date)] = item.n;
         return acc;
@@ -147,10 +153,6 @@ export default defineComponent({
     v-model:items-per-page="itemsPerPage"
   >
     <template #item.date="{ item }">
-      <!-- <v-text-field 
-        :model-value="item.date"
-        @update:model-value="updatedDateItem($event, item)"
-      /> -->
       <v-date-input
         :model-value="item.date"
         @update:model-value="updatedDateItem($event, item)"
@@ -159,8 +161,8 @@ export default defineComponent({
     </template>
 
     <template #item.n="{ item }">
-      <v-text-field 
-        :model-value="item.n.toString()"
+      <v-number-input
+        :model-value="item.n"
         @update:model-value="updatedNItem($event, item)"
       />
     </template>
@@ -172,6 +174,21 @@ export default defineComponent({
       />
     </template>
   </v-data-table>
+
+  <v-row>
+    <v-date-input 
+      v-model="dateToAdd"
+    />
+
+    <v-number-input 
+      v-model="nToAdd"
+    />
+
+    <v-btn 
+      @click="addDateNeeded"
+      text="Add"
+    />
+  </v-row>
 
   <div class="card">
     <v-btn 
