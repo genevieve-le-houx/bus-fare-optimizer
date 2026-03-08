@@ -1,9 +1,16 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-defineProps<{ msg: string }>()
-
-const count = ref(0)
+export default defineComponent({
+  props: {
+    msg: { type: String, required: true },
+  },
+  data() {
+    return {
+      count: 0
+    }
+  }
+})
 </script>
 
 <template>
@@ -16,7 +23,5 @@ const count = ref(0)
 </template>
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
+
 </style>
