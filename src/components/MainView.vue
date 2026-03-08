@@ -4,7 +4,7 @@ import { defineComponent } from 'vue'
 import moment from 'moment';
 import type { Moment } from 'moment';
 
-import { EnumFareType, findBestCombination, convertToString } from '@/methods/methods.ts'
+import { EnumFareType, findBestCombination, convertToString, convertToMoment } from '@/methods/methods.ts'
 import type { BestCombination } from '@/methods/methods.ts'
 
 const dateNeededHeaders = [
@@ -14,7 +14,7 @@ const dateNeededHeaders = [
 ]
 
 type DateNeededItem = {
-  date: string,
+  date: Moment,
   n: number
 }
 
@@ -27,20 +27,20 @@ export default defineComponent({
     return {
       dateNeededHeaders,
       itemsDateNeeded: [
-        { date: "2026-04-01", n: 2 },
-        { date: "2026-04-02", n: 2 },
-        { date: "2026-04-06", n: 2 },
-        { date: "2026-04-07", n: 4 },
-        { date: "2026-04-08", n: 2 },
-        { date: "2026-04-20", n: 4 },
-        { date: "2026-04-21", n: 2 },
-        { date: "2026-04-22", n: 2 },
-        { date: "2026-04-23", n: 2 },
-        { date: "2026-04-24", n: 2 },
-        { date: "2026-04-27", n: 4 },
-        { date: "2026-04-28", n: 2 },
-        { date: "2026-04-29", n: 2 },
-        { date: "2026-04-30", n: 2 },
+        { date: convertToMoment("2026-04-01"), n: 2 },
+        { date: convertToMoment("2026-04-02"), n: 2 },
+        { date: convertToMoment("2026-04-06"), n: 2 },
+        { date: convertToMoment("2026-04-07"), n: 4 },
+        { date: convertToMoment("2026-04-08"), n: 2 },
+        { date: convertToMoment("2026-04-20"), n: 4 },
+        { date: convertToMoment("2026-04-21"), n: 2 },
+        { date: convertToMoment("2026-04-22"), n: 2 },
+        { date: convertToMoment("2026-04-23"), n: 2 },
+        { date: convertToMoment("2026-04-24"), n: 2 },
+        { date: convertToMoment("2026-04-27"), n: 4 },
+        { date: convertToMoment("2026-04-28"), n: 2 },
+        { date: convertToMoment("2026-04-29"), n: 2 },
+        { date: convertToMoment("2026-04-30"), n: 2 },
       ] as Array<DateNeededItem>,
       itemsPerPage: -1,
 
@@ -99,10 +99,17 @@ export default defineComponent({
     
   },
   methods:{
+    convertStringToDate(dateString: string): Moment {
+      return convertToMoment(dateString);
+    },
     convertDateToString(date: Moment): string {
       return convertToString(date)
     },
-    updatedItem(newValue: string, item: DateNeededItem) {
+    updatedDateItem(newValue: Moment, item: DateNeededItem) {
+        // TODO not let user choose a date already there
+        item.date = newValue;
+    },
+    updatedNItem(newValue: string, item: DateNeededItem) {
         const n = parseInt(newValue);
         if (isNaN(n)) {
           return;
@@ -111,12 +118,11 @@ export default defineComponent({
         item.n = n;
     },
     deleteDateNeeded(item: DateNeededItem) {
-        // TODO
         this.itemsDateNeeded = this.itemsDateNeeded.filter(i => i.date !== item.date);
     },
     computeBest() {
       const dateNeeded: Record<string, number> = this.itemsDateNeeded.reduce((acc, item) => {
-        acc[item.date] = item.n;
+        acc[convertToString(item.date)] = item.n;
         return acc;
       }, {} as Record<string, number>);
 
@@ -141,16 +147,21 @@ export default defineComponent({
     v-model:items-per-page="itemsPerPage"
   >
     <template #item.date="{ item }">
-      <v-label 
-        :text="item.date"
-        @click="console.log(item.date)"
+      <!-- <v-text-field 
+        :model-value="item.date"
+        @update:model-value="updatedDateItem($event, item)"
+      /> -->
+      <v-date-input
+        :model-value="item.date"
+        @update:model-value="updatedDateItem($event, item)"
       />
+
     </template>
 
     <template #item.n="{ item }">
       <v-text-field 
         :model-value="item.n.toString()"
-        @update:model-value="updatedItem($event, item)"
+        @update:model-value="updatedNItem($event, item)"
       />
     </template>
 
