@@ -125,10 +125,10 @@ export default defineComponent({
         }
     },
     computeBest() {
-      // TODO make sure all correct month
-
       const dateNeeded: Record<string, number> = this.itemsDateNeeded.reduce((acc, item) => {
-        acc[convertToString(item.date)] = item.n;
+        if (item.date.month() === this.firstDateMonth.month()) {
+          acc[convertToString(item.date)] = item.n;
+        }
         return acc;
       }, {} as Record<string, number>);
 
@@ -144,6 +144,11 @@ export default defineComponent({
 
 <template>
   <h1>{{ msg }}</h1>
+
+  <v-date-input 
+    v-model="firstDateMonth"
+    label="First date of the month"
+  />
 
   <h2>Dates needed</h2>
 
