@@ -1,19 +1,19 @@
 <script lang="ts">
 
 import { defineComponent } from 'vue'
-import HelloWorld from '@/components/HelloWorld.vue';
+import MainView from '@/components/MainView.vue';
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    MainView,
   }
 })
 
 </script>
 
 <template>
-  <HelloWorld msg="My site" />
+  <MainView msg="Bus fare optimizer" />
 </template>
 
 <style scoped>
