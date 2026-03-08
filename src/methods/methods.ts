@@ -24,6 +24,10 @@ function convertToMoment(dateStr: string): Moment {
   return moment(dateStr, 'YYYY-MM-DD');
 }
 
+function convertToString(moment: Moment): string {
+  return moment.format('YYYY-MM-DD');
+}
+
 // function copyNestedList(list: Array<Array<FareToBuy>>): Array<Array<FareToBuy>> {
 //   const listCopy = list.map(fares => 
 //     fares.map(fare => ({ 
@@ -148,5 +152,5 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
   return bestCombination
 }
 
-export { EnumFareType, findBestCombination }
+export { EnumFareType, findBestCombination, convertToString, convertToMoment }
 export type { FareToBuy, BestCombination }

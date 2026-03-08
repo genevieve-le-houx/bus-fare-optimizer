@@ -2,8 +2,10 @@
 import { defineComponent } from 'vue'
 
 import moment from 'moment';
+import type { Moment } from 'moment';
 
-import { EnumFareType, findBestCombination } from '@/methods/methods.ts'
+import { EnumFareType, findBestCombination, convertToString } from '@/methods/methods.ts'
+import type { BestCombination } from '@/methods/methods.ts'
 
 
 export default defineComponent({
@@ -53,6 +55,10 @@ export default defineComponent({
         "2026-04-21": 2
       },
       firstDateMonth: moment("2026-04-01", 'YYYY-MM-DD'),
+      bestCombination: {
+        faresToBuy: [],
+        totalCost: 0
+      } as BestCombination
     }
   },
   computed: {
@@ -64,6 +70,9 @@ export default defineComponent({
 
   },
   methods:{
+    convertDateToString(date: Moment): string {
+      return convertToString(date)
+    },
     computeBest() {
       const bestCombination1 = findBestCombination(this.fares, this.dateNeeded1, this.firstDateMonth);
       const bestCombination2 = findBestCombination(this.fares, this.dateNeeded2, this.firstDateMonth);
@@ -75,14 +84,22 @@ export default defineComponent({
       console.log(bestCombination2)
       console.log("Best combination 3:")
       console.log(bestCombination3)
+
+      this.bestCombination = bestCombination3;
     }
-  }
+  },
   
 })
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
+
+  <h2>Dates needed</h2>
+
+  <p v-for="[date, n] of Object.entries(dateNeeded3)" :key="date">
+      {{ date }}: {{ n }}
+  </p>
 
   <div class="card">
     <v-btn 
@@ -91,6 +108,17 @@ export default defineComponent({
       text="Compute best fare to buy"
     />
   </div>
+
+  <h2>Best fare to buy</h2>
+
+  <div v-if="bestCombination">
+    <p>Total price: {{ bestCombination.totalCost }}</p>
+
+    <p v-for="fareToBuy of bestCombination.faresToBuy" :key="convertDateToString(fareToBuy.date)">
+        {{ convertDateToString(fareToBuy.date) }}: {{ fareToBuy.fareType }}
+    </p>
+  </div>
+  
 
 </template>
 
