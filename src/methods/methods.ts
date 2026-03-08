@@ -1,6 +1,5 @@
 import moment from 'moment';
 import type { Moment } from 'moment';
-import type { leafSelectStrategy } from 'vuetify/lib/composables/nested/selectStrategies.mjs';
 
 
 const enum EnumFareType {
@@ -25,15 +24,15 @@ function convertToMoment(dateStr: string): Moment {
   return moment(dateStr, 'YYYY-MM-DD');
 }
 
-function copyNestedList(list: Array<Array<FareToBuy>>): Array<Array<FareToBuy>> {
-  const listCopy = list.map(fares => 
-    fares.map(fare => ({ 
-      date: fare.date.clone(), // Moment has a .clone() method
-      fareType: fare.fareType 
-    }))
-  )
-  return listCopy;
-}
+// function copyNestedList(list: Array<Array<FareToBuy>>): Array<Array<FareToBuy>> {
+//   const listCopy = list.map(fares => 
+//     fares.map(fare => ({ 
+//       date: fare.date.clone(), // Moment has a .clone() method
+//       fareType: fare.fareType 
+//     }))
+//   )
+//   return listCopy;
+// }
 
 function copyList(list: Array<FareToBuy>): Array<FareToBuy> {
   return list.map(fare => ({ 

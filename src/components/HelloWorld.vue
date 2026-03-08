@@ -2,11 +2,8 @@
 import { defineComponent } from 'vue'
 
 import moment from 'moment';
-import type { Moment } from 'moment';
 
-import { EnumFareType, findBestCombination } from '@/methods/methods';
-import type { FareToBuy, BestCombination } from '@/methods/methods';
-
+import { EnumFareType, findBestCombination } from '@/methods/methods.ts'
 
 
 export default defineComponent({
