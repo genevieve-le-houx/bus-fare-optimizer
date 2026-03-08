@@ -18,6 +18,10 @@ type DateNeededItem = {
   n: number
 }
 
+function checkDateAlreadyThere(date: Moment, items: Array<DateNeededItem>): boolean {
+  return items.some(item => item.date.isSame(date, 'day'));
+}
+
 export default defineComponent({
   name: 'MainView',
   props: {
@@ -109,7 +113,9 @@ export default defineComponent({
       return convertToString(date)
     },
     updatedDateItem(newValue: Moment, item: DateNeededItem) {
-        // TODO not let user choose a date already there
+        if (checkDateAlreadyThere(newValue, this.itemsDateNeeded)) {
+          return;
+        }
         item.date = newValue;
     },
     updatedNItem(newValue: number, item: DateNeededItem) {
@@ -120,7 +126,9 @@ export default defineComponent({
     },
     addDateNeeded() {
         if (this.dateToAdd && this.nToAdd > 0) {
-          // TODO make sure date not already there
+            if (checkDateAlreadyThere(this.dateToAdd, this.itemsDateNeeded)) {
+                return;
+            }
             this.itemsDateNeeded.push({ date: this.dateToAdd, n: this.nToAdd });
         }
     },
@@ -167,8 +175,7 @@ export default defineComponent({
 
     <template #item.n="{ item }">
       <v-number-input
-        :model-value="item.n"
-        @update:model-value="updatedNItem($event, item)"
+        v-model="item.n"
       />
     </template>
 
