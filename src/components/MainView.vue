@@ -102,6 +102,14 @@ export default defineComponent({
     convertDateToString(date: Moment): string {
       return convertToString(date)
     },
+    updatedItem(newValue: string, item: DateNeededItem) {
+        const n = parseInt(newValue);
+        if (isNaN(n)) {
+          return;
+        }
+
+        item.n = n;
+    },
     deleteDateNeeded(item: DateNeededItem) {
         // TODO
         this.itemsDateNeeded = this.itemsDateNeeded.filter(i => i.date !== item.date);
@@ -140,9 +148,9 @@ export default defineComponent({
     </template>
 
     <template #item.n="{ item }">
-      <v-label 
-        :text="item.n.toString()"
-        @click="console.log(item.n)"
+      <v-text-field 
+        :model-value="item.n.toString()"
+        @update:model-value="updatedItem($event, item)"
       />
     </template>
 

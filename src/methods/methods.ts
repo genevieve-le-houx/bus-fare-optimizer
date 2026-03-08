@@ -14,6 +14,7 @@ type FareToBuy = {
   date: Moment;
   fareType: EnumFareType;
 }
+// TODO maybe add number to buy to not have big list of fares to buy when we have a lot of single fares to buy on the same day
 
 type BestCombination = {
   faresToBuy: Array<FareToBuy>;
