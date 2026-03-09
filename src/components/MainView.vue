@@ -6,11 +6,14 @@ import type { Moment } from 'moment';
 
 import { EnumFareType, findBestCombination, convertToString, convertToMoment } from '@/methods/methods.ts'
 import type { BestCombination } from '@/methods/methods.ts'
+import type { VDataTable } from 'vuetify/components';
 
-const dateNeededHeaders = [
-  { title: 'Date', key: 'date' },
-  { title: 'Number of rides needed', key: 'n' },
-  { title: 'Actions', key: 'actions' },
+type Headers = VDataTable['$props']['headers'];
+
+const dateNeededHeaders: Headers = [
+  { title: 'Date', key: 'date', align: 'center'},
+  { title: 'Number of rides needed', key: 'n', align: 'center'},
+  { title: 'Actions', key: 'actions', align: 'center'},
 ]
 
 type DateNeededItem = {
@@ -98,8 +101,8 @@ export default defineComponent({
     }
   },
   computed: {
-    textCount(): string {
-      return `Count is: ${this.count}`;
+    formattedPrice(): string {
+      return this.bestCombination.totalCost.toFixed(2) + " $"
     }
   },
   mounted() {
@@ -152,78 +155,106 @@ export default defineComponent({
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
-  <v-date-input 
+  <v-row justify="center">
+    <h1>{{ msg }}</h1>
+  </v-row>
+  
+  <v-row>
+    <v-date-input 
     v-model="firstDateMonth"
     label="First date of the month"
     input-format="yyyy-mm-dd"
   />
+  </v-row>
 
-  <h2>Dates needed</h2>
+  <v-row justify="center">
+    <h2>Dates needed</h2>
+  </v-row>
+  
+  <v-row>
+    <v-data-table
+        :headers="dateNeededHeaders"
+        :items="itemsDateNeeded"
+        v-model:items-per-page="itemsPerPage"
+    >
+      <template #item.date="{ item }">
+        <v-date-input
+          :model-value="item.date"
+          @update:model-value="updatedDateItem($event, item)"
+          input-format="yyyy-mm-dd"
+        />
 
-  <v-data-table
-    :headers="dateNeededHeaders"
-    :items="itemsDateNeeded"
-    v-model:items-per-page="itemsPerPage"
-  >
-    <template #item.date="{ item }">
-      <v-date-input
-        :model-value="item.date"
-        @update:model-value="updatedDateItem($event, item)"
-        input-format="yyyy-mm-dd"
-      />
+      </template>
 
-    </template>
+      <template #item.n="{ item }">
+        <v-number-input
+          control-variant="stacked"
+          inset
+          v-model="item.n"
+        />
+      </template>
 
-    <template #item.n="{ item }">
-      <v-number-input
-        v-model="item.n"
-      />
-    </template>
+      <template #item.actions="{ item }">
+        <v-btn 
+          prepend-icon="mdi-trash-can"
+          @click="deleteDateNeeded(item)"
+        />
+      </template>
+    </v-data-table>
+  </v-row>
+  
 
-    <template #item.actions="{ item }">
-      <v-btn 
-        @click="deleteDateNeeded(item)"
-        text="Delete"
-      />
-    </template>
-  </v-data-table>
+  
 
   <v-row>
-    <v-date-input 
+    <v-spacer />
+    <v-col cols="3">
+      <v-date-input 
       v-model="dateToAdd"
       input-format="yyyy-mm-dd"
     />
-
-    <v-number-input 
+    </v-col>
+    
+    <v-col cols="3">
+      <v-number-input
+      control-variant="stacked"
+      inset
       v-model="nToAdd"
     />
+    </v-col>
 
-    <v-btn 
+    <v-col cols="3" class="justify-start text-left">
+      <v-btn 
       @click="addDateNeeded"
       text="Add"
     />
+    </v-col>
+    <v-spacer />
   </v-row>
 
-  <div class="card">
+  <v-row justify="center">
     <v-btn 
       type="button" 
       @click="computeBest"
       text="Compute best fare to buy"
     />
-  </div>
+  </v-row>
 
-  <h2>Best fare to buy</h2>
+  <v-row justify="center">
+    <h2>Best fare to buy</h2>
+  </v-row>
+  
+    <v-row justify="center">
+      Total price: {{ formattedPrice }}
+    </v-row>
 
-  <div v-if="bestCombination">
-    <p>Total price: {{ bestCombination.totalCost }}</p>
-
-    <p v-for="fareToBuy of bestCombination.faresToBuy" :key="convertDateToString(fareToBuy.date)">
+    <v-row 
+      v-for="fareToBuy of bestCombination.faresToBuy" 
+      :key="convertDateToString(fareToBuy.date)"
+      justify="center"
+    >
         {{ convertDateToString(fareToBuy.date) }}: {{ fareToBuy.fareType }} x{{ fareToBuy.qty }} 
-        <!-- TODO should display in 0.00$ style -->
-    </p>
-  </div>
+    </v-row>
   
 
 </template>

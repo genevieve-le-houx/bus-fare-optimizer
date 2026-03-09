@@ -9,6 +9,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import MomentAdapter from '@date-io/moment'
 import { VDateInput } from 'vuetify/labs/VDateInput'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 const vuetify = createVuetify({
   components: {
@@ -18,7 +19,17 @@ const vuetify = createVuetify({
   directives,
   date: {
     adapter: MomentAdapter,
-  }
+  },
+  theme: {
+    defaultTheme: 'dark', // 'system' | 'light' | 'dark'
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
 })
 
 createApp(App).use(vuetify).mount('#app')

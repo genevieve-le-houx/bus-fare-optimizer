@@ -13,7 +13,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <MainView msg="Bus fare optimizer" />
+  <MainView 
+    msg="Bus fare optimizer" 
+  />
 </template>
 
 <style scoped>
