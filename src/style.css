@@ -79,6 +79,20 @@ button:focus-visible {
 } */
 
 /* Custom styles */
-v-btn {
-  color: red;
+/* Vuetify button customization */
+.v-btn {
+  opacity: 1;
+}
+
+.v-btn:hover .v-btn__overlay {
+  opacity: 0 !important;
+  background-color: transparent !important;
+}
+
+.v-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.v-btn:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
