@@ -22,8 +22,8 @@ function sortDate(a: DateNeededItem, b: DateNeededItem): number {
 
 const dateNeededHeaders: Headers = [
   { title: 'Date', key: 'date', align: 'center', sortable: true, sortRaw: sortDate},
-  { title: 'Number of rides needed', key: 'n', align: 'center'},
-  { title: 'Actions', key: 'actions', align: 'center'},
+  { title: 'Number of rides needed', key: 'n', align: 'center', sortable: false},
+  { title: 'Actions', key: 'actions', align: 'center', sortable: false},
 ]
 
 type DateNeededItem = {

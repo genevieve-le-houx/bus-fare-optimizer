@@ -169,6 +169,9 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
     totalCost: priceSmaller
   }
 
+  // Order by date
+  bestCombination.faresToBuy.sort((a, b) => a.date.diff(b.date))
+
   return bestCombination
 }
 
