@@ -13,6 +13,7 @@ const enum EnumFareType {
 type FareToBuy = {
   date: Moment;
   fareType: EnumFareType;
+  qty: number;
 }
 // TODO maybe add number to buy to not have big list of fares to buy when we have a lot of single fares to buy on the same day
 
@@ -29,41 +30,55 @@ function convertToString(moment: Moment): string {
   return moment.format('YYYY-MM-DD');
 }
 
-// function copyNestedList(list: Array<Array<FareToBuy>>): Array<Array<FareToBuy>> {
-//   const listCopy = list.map(fares => 
-//     fares.map(fare => ({ 
-//       date: fare.date.clone(), // Moment has a .clone() method
-//       fareType: fare.fareType 
-//     }))
-//   )
-//   return listCopy;
-// }
+function copyNestedList(list: Array<Array<FareToBuy>>): Array<Array<FareToBuy>> {
+  const listCopy = list.map(fares => 
+    fares.map(fare => ({ 
+      date: fare.date.clone(), // Moment has a .clone() method
+      fareType: fare.fareType,
+      qty: fare.qty
+    }))
+  )
+  return listCopy;
+}
 
 function copyList(list: Array<FareToBuy>): Array<FareToBuy> {
   return list.map(fare => ({ 
     date: fare.date.clone(), // Moment has a .clone() method
-    fareType: fare.fareType 
+    fareType: fare.fareType,
+    qty: fare.qty
   }));
 }
 
-function branch3Options(fares: Record<EnumFareType, number>, date: Moment, n: number): Array<Array<FareToBuy>> {
-  const listPossibilities: Array<Array<FareToBuy>> = []
+function branch3Options(fares: Record<EnumFareType, number>, date: Moment, n: number): Array<FareToBuy> {
+  const listPossibilities: Array<FareToBuy> = []
 
   // 3 options: 5 days, illimited vs single, if saturday get illimited weekend
-  listPossibilities.push([{ date, fareType: EnumFareType.illimited_5_days }])
+  listPossibilities.push({ 
+      date: date,
+      fareType: EnumFareType.illimited_5_days ,
+      qty: 1
+  })
 
   if (n * fares[EnumFareType.single] > fares[EnumFareType.illimited_day]) {
-    listPossibilities.push([{ date, fareType: EnumFareType.illimited_day }])
+    listPossibilities.push({ 
+      date: date,
+      fareType: EnumFareType.illimited_day ,
+      qty: 1
+    })
   } else {
-    const listDates: Array<FareToBuy> = [];
-    for (let i = 0; i < n; i++) {
-      listDates.push({ date, fareType: EnumFareType.single })
-    }
-    listPossibilities.push(listDates);
+    listPossibilities.push({
+      date: date,
+      fareType: EnumFareType.single,
+      qty: n
+    });
   }
 
   if (date.day() === 6) { // saturday
-    listPossibilities.push([{ date, fareType: EnumFareType.illimited_week_end }])
+    listPossibilities.push({
+      date: date,
+      fareType: EnumFareType.illimited_week_end,
+      qty: 1
+    })
   }
 
   return listPossibilities
@@ -78,9 +93,9 @@ function branchOut3NewPossibilities(
 
     for (const [j, newPossibility] of listNewPossibilities.entries()) {
       if (j === 0) {
-        possibility.push(...newPossibility)
+        possibility.push(newPossibility)
       } else {
-        possibilityCopy.push(...newPossibility)
+        possibilityCopy.push(newPossibility)
         possibilityToAdd.push(possibilityCopy)
       }
     }
@@ -94,7 +109,7 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
     if (i === 0) {
       const listNewPossibilities = branch3Options(fares, date, n);
 
-      listPossibilities.push(...listNewPossibilities);
+      listPossibilities.push(...(listNewPossibilities.map(possibility => [possibility])));
 
     } else {
       // const listPossibilitiesCopy = copyNestedList(listPossibilities);
@@ -126,7 +141,7 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
 
   // Find the best possibilities
   const priceForPossibility = listPossibilities.map(possibility => {
-    const price = possibility.reduce((acc, fareToBuy) => acc + fares[fareToBuy.fareType], 0)
+    const price = possibility.reduce((acc, fareToBuy) => acc + fares[fareToBuy.fareType]*fareToBuy.qty, 0)
     return price
     }
   )
@@ -138,7 +153,11 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
   // Compare with month
   let fareToBuy: Array<FareToBuy> = []
   if (priceSmaller > fares[EnumFareType.illimited_month]) {
-    fareToBuy = [{ date: firstDayMonth, fareType: EnumFareType.illimited_month }]
+    fareToBuy = [{ 
+      date: firstDayMonth, 
+      fareType: EnumFareType.illimited_month,
+      qty: 1
+    }]
     priceSmaller = fares[EnumFareType.illimited_month]
   } else {
     fareToBuy = fareSmaller

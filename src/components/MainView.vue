@@ -220,7 +220,7 @@ export default defineComponent({
     <p>Total price: {{ bestCombination.totalCost }}</p>
 
     <p v-for="fareToBuy of bestCombination.faresToBuy" :key="convertDateToString(fareToBuy.date)">
-        {{ convertDateToString(fareToBuy.date) }}: {{ fareToBuy.fareType }} 
+        {{ convertDateToString(fareToBuy.date) }}: {{ fareToBuy.fareType }} x{{ fareToBuy.qty }} 
         <!-- TODO should display in 0.00$ style -->
     </p>
   </div>
