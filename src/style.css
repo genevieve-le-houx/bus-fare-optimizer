@@ -84,12 +84,23 @@ button:focus-visible {
   opacity: 1;
 }
 
-.v-btn:hover .v-btn__overlay {
+.v-btn .v-btn__overlay {
+  opacity: 0 !important;
+  background-color: transparent !important;
+}
+
+.v-btn:hover .v-btn__overlay,
+.v-btn:active .v-btn__overlay,
+.v-btn:focus .v-btn__overlay {
   opacity: 0 !important;
   background-color: transparent !important;
 }
 
 .v-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.v-btn:active {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 

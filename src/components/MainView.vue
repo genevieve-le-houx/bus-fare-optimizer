@@ -10,8 +10,18 @@ import type { VDataTable } from 'vuetify/components';
 
 type Headers = VDataTable['$props']['headers'];
 
+function sortDate(a: DateNeededItem, b: DateNeededItem): number {
+  if (a.date.isBefore(b.date)) {
+    return -1;
+  } else if (a.date.isAfter(b.date)) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 const dateNeededHeaders: Headers = [
-  { title: 'Date', key: 'date', align: 'center'},
+  { title: 'Date', key: 'date', align: 'center', sortable: true, sortRaw: sortDate},
   { title: 'Number of rides needed', key: 'n', align: 'center'},
   { title: 'Actions', key: 'actions', align: 'center'},
 ]
@@ -50,6 +60,7 @@ export default defineComponent({
         { date: convertToMoment("2026-04-30"), n: 2 },
       ] as Array<DateNeededItem>,
       itemsPerPage: -1,
+      sortBy: [{ key: 'date', order: 'asc' as const}],
 
       dateToAdd: null as Moment | null,
       nToAdd: 1,
@@ -173,6 +184,7 @@ export default defineComponent({
   
   <v-row>
     <v-data-table
+        v-model:sort-by="sortBy"
         :headers="dateNeededHeaders"
         :items="itemsDateNeeded"
         v-model:items-per-page="itemsPerPage"
