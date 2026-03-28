@@ -205,7 +205,8 @@ export default defineComponent({
   </v-row>
 
   <v-row>
-    <v-file-input 
+    <v-file-input
+      density="compact"
       label="Fare config"
       @update:model-value="onNewFareFile"
     />
