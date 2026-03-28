@@ -71,7 +71,7 @@ export default defineComponent({
         [EnumFareType.illimited_day]: 10.25,
         [EnumFareType.illimited_week_end]: 18.25,
         [EnumFareType.illimited_5_days]: 34,
-        [EnumFareType.illimited_month]: 99.50,
+        [EnumFareType.illimited_month]: 74.63,
       },
       //   "2026-04-01": 2,
       //   "2026-04-02": 2,
@@ -120,7 +120,8 @@ export default defineComponent({
     
   },
   methods:{
-    // TODO when adding date, reorders them
+    // TODO add something to upload a new fare list
+
     convertStringToDate(dateString: string): Moment {
       return convertToMoment(dateString);
     },
