@@ -293,7 +293,7 @@ export default defineComponent({
           <!-- {{ convertDateToString(item.date) }} -->
           <v-date-input
             density="compact"
-            
+            min-width="150"
             :model-value="item.date"
             @update:model-value="updatedDateItem($event, item)"
             input-format="yyyy-mm-dd"
