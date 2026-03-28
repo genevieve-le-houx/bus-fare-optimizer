@@ -23,6 +23,17 @@ function sortDate(a: DateNeededItem, b: DateNeededItem): number {
   }
 }
 
+function computeFirstDayNextMonth(): Moment {
+  // First date month should be next current month...
+  const currentDate = moment()
+  const FirstDayNextMonth = currentDate.subtract(currentDate.date()-1, 'd').add(1, 'M')
+
+  return moment(
+    `${FirstDayNextMonth.year()}-${FirstDayNextMonth.month() + 1}-${FirstDayNextMonth.date()}`, 
+    'YYYY-MM-DD'
+  )
+}
+
 const dateNeededHeaders: Headers = [
   { title: 'Date', key: 'date', align: 'center', sortable: true, sortRaw: sortDate},
   { title: 'Number of rides needed', key: 'n', align: 'center', sortable: false},
@@ -47,20 +58,20 @@ export default defineComponent({
     return {
       dateNeededHeaders,
       itemsDateNeeded: [
-        { date: convertToMoment("2026-04-01"), n: 2 },
-        { date: convertToMoment("2026-04-02"), n: 2 },
-        { date: convertToMoment("2026-04-06"), n: 2 },
-        { date: convertToMoment("2026-04-07"), n: 4 },
-        { date: convertToMoment("2026-04-08"), n: 2 },
-        { date: convertToMoment("2026-04-20"), n: 4 },
-        { date: convertToMoment("2026-04-21"), n: 2 },
-        { date: convertToMoment("2026-04-22"), n: 2 },
-        { date: convertToMoment("2026-04-23"), n: 2 },
-        { date: convertToMoment("2026-04-24"), n: 2 },
-        { date: convertToMoment("2026-04-27"), n: 4 },
-        { date: convertToMoment("2026-04-28"), n: 2 },
-        { date: convertToMoment("2026-04-29"), n: 2 },
-        { date: convertToMoment("2026-04-30"), n: 2 },
+        // { date: convertToMoment("2026-04-01"), n: 2 },
+        // { date: convertToMoment("2026-04-02"), n: 2 },
+        // { date: convertToMoment("2026-04-06"), n: 2 },
+        // { date: convertToMoment("2026-04-07"), n: 4 },
+        // { date: convertToMoment("2026-04-08"), n: 2 },
+        // { date: convertToMoment("2026-04-20"), n: 4 },
+        // { date: convertToMoment("2026-04-21"), n: 2 },
+        // { date: convertToMoment("2026-04-22"), n: 2 },
+        // { date: convertToMoment("2026-04-23"), n: 2 },
+        // { date: convertToMoment("2026-04-24"), n: 2 },
+        // { date: convertToMoment("2026-04-27"), n: 4 },
+        // { date: convertToMoment("2026-04-28"), n: 2 },
+        // { date: convertToMoment("2026-04-29"), n: 2 },
+        // { date: convertToMoment("2026-04-30"), n: 2 },
       ] as Array<DateNeededItem>,
       itemsPerPage: -1,
       sortBy: [{ key: 'date', order: 'asc' as const}],
@@ -76,7 +87,7 @@ export default defineComponent({
         // [EnumFareType.illimited_5_days]: 34,
         // [EnumFareType.illimited_month]: 74.63,
       } as Record<EnumFareTypeStrings, number>,
-      firstDateMonth: moment("2026-04-01", 'YYYY-MM-DD'),
+      firstDateMonth: computeFirstDayNextMonth(),
       bestCombination: {
         faresToBuy: [],
         totalCost: 0
@@ -97,8 +108,8 @@ export default defineComponent({
         this.readJsonConfig(data)
       }
     )
-    
   },
+
   methods:{
     // TODO add something to upload a new fare list
     readJsonConfig(data: Record<EnumFareTypeStrings, number>) {
@@ -160,6 +171,13 @@ export default defineComponent({
         return acc;
       }, {} as Record<string, number>);
 
+      if (Object.keys(dateNeeded).length === 0) {
+        this.bestCombination = {
+          faresToBuy: [],
+          totalCost: 0
+        }
+        return
+      }
 
       const bestCombination = findBestCombination(this.fares, dateNeeded, this.firstDateMonth);
 
