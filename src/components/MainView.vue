@@ -91,7 +91,6 @@ export default defineComponent({
   mounted() {
     // Compute fares from file
     const baseUrl = import.meta.env.BASE_URL
-    console.log(baseUrl)
     axios.get(`${baseUrl}/config/fares.json`).then((response: AxiosResponse) => {
         const data = response.data
         console.log(data)
@@ -108,16 +107,23 @@ export default defineComponent({
       }
     },
 
-    onNewFareFile(data: File) {
+    onNewFareFile(data: File | File[]) {
+      if (Array.isArray(data)) {
+        alert("only import a single file")
+      }
+
+      // We are now sure data is only a single file
       const reader = new FileReader()
       reader.addEventListener("load", (e: ProgressEvent<FileReader>) => {
         if (e.target?.result !== null) {
-          this.readJsonConfig(JSON.parse(e.target?.result as string))
+          const data = JSON.parse(e.target?.result as string)
+          console.log(data)
+          this.readJsonConfig(data)
         }
         
       })
 
-      reader.readAsText(data)
+      reader.readAsText(data as File)
     },
 
     convertStringToDate(dateString: string): Moment {
