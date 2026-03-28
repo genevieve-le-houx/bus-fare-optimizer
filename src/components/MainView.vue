@@ -121,7 +121,9 @@ export default defineComponent({
   },
   mounted() {
     // Compute fares from file
-    axios.get('bus-fare-optimizer/config/fares.json').then((response: AxiosResponse) => {
+    const baseUrl = import.meta.env.BASE_URL
+    console.log(baseUrl)
+    axios.get(`${baseUrl}/config/fares.json`).then((response: AxiosResponse) => {
         const data = response.data
         console.log(data)
       }
