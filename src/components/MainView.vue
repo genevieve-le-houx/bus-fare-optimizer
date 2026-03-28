@@ -213,42 +213,6 @@ export default defineComponent({
   </v-row>
   
   <v-row>
-    <v-data-table
-        v-model:sort-by="sortBy"
-        :headers="dateNeededHeaders"
-        :items="itemsDateNeeded"
-        v-model:items-per-page="itemsPerPage"
-    >
-      <template #item.date="{ item }">
-        <v-date-input
-          :model-value="item.date"
-          @update:model-value="updatedDateItem($event, item)"
-          input-format="yyyy-mm-dd"
-        />
-
-      </template>
-
-      <template #item.n="{ item }">
-        <v-number-input
-          control-variant="stacked"
-          inset
-          v-model="item.n"
-        />
-      </template>
-
-      <template #item.actions="{ item }">
-        <v-btn 
-          prepend-icon="mdi-trash-can"
-          @click="deleteDateNeeded(item)"
-        />
-      </template>
-    </v-data-table>
-  </v-row>
-  
-
-  
-
-  <v-row>
     <v-spacer />
     <v-col cols="3">
       <v-date-input 
@@ -300,6 +264,38 @@ export default defineComponent({
         {{ convertDateToString(fareToBuy.date) }}: {{ fareToBuy.fareType }} x{{ fareToBuy.qty }} 
     </v-row>
   
+    <v-row>
+      <v-data-table
+          v-model:sort-by="sortBy"
+          :headers="dateNeededHeaders"
+          :items="itemsDateNeeded"
+          v-model:items-per-page="itemsPerPage"
+      >
+        <template #item.date="{ item }">
+          <v-date-input
+            :model-value="item.date"
+            @update:model-value="updatedDateItem($event, item)"
+            input-format="yyyy-mm-dd"
+          />
+
+        </template>
+
+        <template #item.n="{ item }">
+          <v-number-input
+            control-variant="stacked"
+            inset
+            v-model="item.n"
+          />
+        </template>
+
+        <template #item.actions="{ item }">
+          <v-btn 
+            prepend-icon="mdi-trash-can"
+            @click="deleteDateNeeded(item)"
+          />
+        </template>
+      </v-data-table>
+    </v-row>
 
 </template>
 
