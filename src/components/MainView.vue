@@ -240,6 +240,7 @@ export default defineComponent({
     <v-spacer />
     <v-col>
       <v-number-input
+        density="compact"
         min-width="80"
         control-variant="stacked"
         inset
@@ -302,6 +303,7 @@ export default defineComponent({
 
          <template #item.n="{ item }">
           <v-number-input
+            density="compact"
             min-width="80"
             control-variant="stacked"
             inset
