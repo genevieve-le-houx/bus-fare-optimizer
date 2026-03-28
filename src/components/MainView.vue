@@ -8,7 +8,7 @@ import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
 import { EnumFareType, findBestCombination, convertToString, convertToMoment } from '@/methods/methods.ts'
-import type { BestCombination } from '@/methods/methods.ts'
+import type { EnumFareTypeStrings, BestCombination } from '@/methods/methods.ts'
 import type { VDataTable } from 'vuetify/components';
 
 type Headers = VDataTable['$props']['headers'];
@@ -70,43 +70,12 @@ export default defineComponent({
 
       count: 0,
       fares: {
-        [EnumFareType.single]: 3.25,
-        [EnumFareType.illimited_day]: 10.25,
-        [EnumFareType.illimited_week_end]: 18.25,
-        [EnumFareType.illimited_5_days]: 34,
-        [EnumFareType.illimited_month]: 74.63,
-      },
-      //   "2026-04-01": 2,
-      //   "2026-04-02": 2,
-      //   "2026-04-03": 2,
-      // },
-      // dateNeeded2: {
-      //   "2026-04-01": 2,
-      //   "2026-04-02": 2,
-      //   "2026-04-06": 2,
-      //   "2026-04-07": 4,
-      //   "2026-04-08": 2,
-      //   "2026-04-20": 4,
-      //   "2026-04-21": 2,
-      //   "2026-04-22": 2,
-      //   "2026-04-23": 2,
-      //   "2026-04-24": 2,
-      //   "2026-04-27": 4,
-      //   "2026-04-28": 2,
-      //   "2026-04-29": 2,
-      //   "2026-04-30": 2,
-      // },
-      // dateNeeded3: {
-      //   "2026-04-01": 2,
-      //   "2026-04-02": 2,
-      //   "2026-04-04": 5,
-      //   "2026-04-05": 5,
-      //   "2026-04-06": 2,
-      //   "2026-04-07": 4,
-      //   "2026-04-08": 2,
-      //   "2026-04-20": 4,
-      //   "2026-04-21": 2
-      // },
+        // [EnumFareType.single]: 3.25,
+        // [EnumFareType.illimited_day]: 10.25,
+        // [EnumFareType.illimited_week_end]: 18.25,
+        // [EnumFareType.illimited_5_days]: 34,
+        // [EnumFareType.illimited_month]: 74.63,
+      } as Record<EnumFareTypeStrings, number>,
       firstDateMonth: moment("2026-04-01", 'YYYY-MM-DD'),
       bestCombination: {
         faresToBuy: [],
@@ -126,12 +95,18 @@ export default defineComponent({
     axios.get(`${baseUrl}/config/fares.json`).then((response: AxiosResponse) => {
         const data = response.data
         console.log(data)
+        this.readJsonConfig(data)
       }
     )
     
   },
   methods:{
     // TODO add something to upload a new fare list
+    readJsonConfig(data: Record<EnumFareTypeStrings, number>) {
+      for (const [key, value] of Object.entries(data)) {
+        this.fares[EnumFareType[key as EnumFareTypeStrings]] = value
+      }
+    },
 
     convertStringToDate(dateString: string): Moment {
       return convertToMoment(dateString);

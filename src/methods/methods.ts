@@ -2,13 +2,15 @@ import moment from 'moment';
 import type { Moment } from 'moment';
 
 
-const enum EnumFareType {
+enum EnumFareType {
   single = "single",
   illimited_day = "illimited_day",
   illimited_week_end = "illimited_week_end",
   illimited_5_days = "illimited_5_days",
   illimited_month = "illimited_month"
 }
+
+type EnumFareTypeStrings = keyof typeof EnumFareType;
 
 type FareToBuy = {
   date: Moment;
@@ -176,4 +178,4 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
 }
 
 export { EnumFareType, findBestCombination, convertToString, convertToMoment }
-export type { FareToBuy, BestCombination }
+export type { EnumFareTypeStrings, FareToBuy, BestCombination }
