@@ -4,6 +4,9 @@ import { defineComponent } from 'vue'
 import moment from 'moment';
 import type { Moment } from 'moment';
 
+import axios from 'axios';
+import type { AxiosResponse } from 'axios';
+
 import { EnumFareType, findBestCombination, convertToString, convertToMoment } from '@/methods/methods.ts'
 import type { BestCombination } from '@/methods/methods.ts'
 import type { VDataTable } from 'vuetify/components';
@@ -117,6 +120,12 @@ export default defineComponent({
     }
   },
   mounted() {
+    // Compute fares from file
+    axios.get('bus-fare-optimizer/config/fares.json').then((response: AxiosResponse) => {
+        const data = response.data
+        console.log(data)
+      }
+    )
     
   },
   methods:{
