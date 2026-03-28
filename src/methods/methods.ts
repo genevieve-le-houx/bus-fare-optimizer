@@ -177,5 +177,9 @@ function findBestCombination(fares: Record<EnumFareType, number>, dateNeeded: Re
   return bestCombination
 }
 
-export { EnumFareType, findBestCombination, convertToString, convertToMoment }
+function formatDollars(price: number): string {
+  return price.toFixed(2) + " $"
+}
+
+export { EnumFareType, findBestCombination, convertToString, convertToMoment, formatDollars }
 export type { EnumFareTypeStrings, FareToBuy, BestCombination }

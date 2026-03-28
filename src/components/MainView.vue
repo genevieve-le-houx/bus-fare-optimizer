@@ -7,7 +7,7 @@ import type { Moment } from 'moment';
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 
-import { EnumFareType, findBestCombination, convertToString, convertToMoment } from '@/methods/methods.ts'
+import { EnumFareType, findBestCombination, convertToString, convertToMoment, formatDollars } from '@/methods/methods.ts'
 import type { EnumFareTypeStrings, BestCombination } from '@/methods/methods.ts'
 import type { VDataTable } from 'vuetify/components';
 
@@ -96,7 +96,7 @@ export default defineComponent({
   },
   computed: {
     formattedPrice(): string {
-      return this.bestCombination.totalCost.toFixed(2) + " $"
+      return formatDollars(this.bestCombination.totalCost)
     }
   },
   mounted() {
@@ -111,6 +111,9 @@ export default defineComponent({
   },
 
   methods:{
+    formatDollarsMethod(price: number): string {
+      return formatDollars(price)
+    },
     // TODO add something to upload a new fare list
     readJsonConfig(data: Record<EnumFareTypeStrings, number>) {
       for (const [key, value] of Object.entries(data)) {
@@ -191,6 +194,14 @@ export default defineComponent({
 <template>
   <v-row justify="center">
     <h1>{{ msg }}</h1>
+  </v-row>
+
+  <v-row class="text-left">
+    <ul>
+    <li v-for="[key, value] of Object.entries(fares)" :bind="key">
+      {{ key }} : {{ formatDollarsMethod(value) }}
+    </li>
+    </ul>
   </v-row>
 
   <v-row>
