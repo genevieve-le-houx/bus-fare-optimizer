@@ -202,10 +202,11 @@ export default defineComponent({
   
   <v-row>
     <v-date-input 
-    v-model="firstDateMonth"
-    label="First date of the month"
-    input-format="yyyy-mm-dd"
-  />
+      density="compact"
+      v-model="firstDateMonth"
+      label="First date of the month"
+      input-format="yyyy-mm-dd"
+    />
   </v-row>
 
   <v-row justify="center">
@@ -213,29 +214,32 @@ export default defineComponent({
   </v-row>
   
   <v-row>
-    <v-spacer />
-    <v-col cols="3">
-      <v-date-input 
-        v-model="dateToAdd"
-        input-format="yyyy-mm-dd"
-        :year="firstDateMonth.year()"
-        :month="firstDateMonth.month()"
+    <v-date-input
+      density="compact"
+      min-width="150"
+      v-model="dateToAdd"
+      input-format="yyyy-mm-dd"
+      :year="firstDateMonth.year()"
+      :month="firstDateMonth.month()"
     />
-    </v-col>
+  </v-row>
     
-    <v-col cols="3">
+  <v-row>
+    <v-spacer />
+    <v-col>
       <v-number-input
+      min-width="80"
       control-variant="stacked"
       inset
       v-model="nToAdd"
     />
     </v-col>
 
-    <v-col cols="3" class="justify-start text-left">
-      <v-btn 
-      @click="addDateNeeded"
-      text="Add"
-    />
+    <v-col class="justify-start text-left">
+      <v-btn
+        @click="addDateNeeded"
+        text="Add"
+      />
     </v-col>
     <v-spacer />
   </v-row>
@@ -272,7 +276,10 @@ export default defineComponent({
           v-model:items-per-page="itemsPerPage"
       >
         <template #item.date="{ item }">
+          <!-- {{ convertDateToString(item.date) }} -->
           <v-date-input
+            density="compact"
+            
             :model-value="item.date"
             @update:model-value="updatedDateItem($event, item)"
             input-format="yyyy-mm-dd"
@@ -280,8 +287,9 @@ export default defineComponent({
 
         </template>
 
-        <template #item.n="{ item }">
+         <template #item.n="{ item }">
           <v-number-input
+            min-width="80"
             control-variant="stacked"
             inset
             v-model="item.n"
