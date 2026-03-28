@@ -108,6 +108,18 @@ export default defineComponent({
       }
     },
 
+    onNewFareFile(data: File) {
+      const reader = new FileReader()
+      reader.addEventListener("load", (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result !== null) {
+          this.readJsonConfig(JSON.parse(e.target?.result as string))
+        }
+        
+      })
+
+      reader.readAsText(data)
+    },
+
     convertStringToDate(dateString: string): Moment {
       return convertToMoment(dateString);
     },
@@ -155,6 +167,13 @@ export default defineComponent({
 <template>
   <v-row justify="center">
     <h1>{{ msg }}</h1>
+  </v-row>
+
+  <v-row>
+    <v-file-input 
+      label="Fare config"
+      @update:model-value="onNewFareFile"
+    />
   </v-row>
   
   <v-row>
