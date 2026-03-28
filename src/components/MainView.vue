@@ -228,11 +228,12 @@ export default defineComponent({
     <v-spacer />
     <v-col>
       <v-number-input
-      min-width="80"
-      control-variant="stacked"
-      inset
-      v-model="nToAdd"
-    />
+        min-width="80"
+        control-variant="stacked"
+        inset
+        label="Number of rides needed"
+        v-model="nToAdd"
+      />
     </v-col>
 
     <v-col class="justify-start text-left">
