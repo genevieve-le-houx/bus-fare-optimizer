@@ -323,5 +323,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
+.v-btn {
+  background-color: blue;
+}
 </style>
