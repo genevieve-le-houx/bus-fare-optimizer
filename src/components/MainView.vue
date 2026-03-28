@@ -252,8 +252,10 @@ export default defineComponent({
     <v-spacer />
     <v-col cols="3">
       <v-date-input 
-      v-model="dateToAdd"
-      input-format="yyyy-mm-dd"
+        v-model="dateToAdd"
+        input-format="yyyy-mm-dd"
+        :year="firstDateMonth.year()"
+        :month="firstDateMonth.month()"
     />
     </v-col>
     
